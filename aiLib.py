@@ -27,6 +27,8 @@
 # print(predicted_class_id)
 from selenium.webdriver.common.by import By
 from googletrans import Translator
+from gpt4free import you
+from price_parser import Price
 class AiClassify():
     def __init__(self):
         self.translator = Translator()
@@ -46,3 +48,11 @@ class AiClassify():
                 i+=1
             return -1
         return -1
+    def isProduct(self, textContent):
+        textContent = textContent.replace("\"", '')
+        response = you.Completion.create(
+            prompt=f'''What is the price. Answer with only one word. {textContent}''',
+            chat=[])
+        print(response)
+        return Price.fromstring(response.text).amount
+
